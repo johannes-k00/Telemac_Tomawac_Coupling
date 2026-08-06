@@ -31,32 +31,52 @@ The datasets are needed to *impose a wave spectrum* along the open boundary thro
 
 ### Step 1: Extract Open Boundary Nodes
 * **Input:** Blue Kenue Mesh file (`.ngh`) and Boundary Condition file (`.cli`).
-* **Processing:** Scans the mesh for boundary type `5444` (boundary marker = 1) and matches node IDs with coordinates $(X, Y)$.
+* **Processing:**
+  * Extracts all mesh nodes marked as boundary nodes from the .ngh mesh file.
+  * Reads the TELEMAC boundary condition file (.cli) and identifies the nodes belonging to the open boundary (boundary type beginning with 5, e.g. 5444).
+  * Matches boundary node IDs with their mesh coordinates.
+  * Writes the coordinates into a point file formatted for the subsequent spectral extraction workflow.
 * **Output:** `boundary_knots.csv`, `merged.csv`, `coordinates_spectra_to_impose.dat`
 
 ### Step 2: Apply Coordinate Shift
 * **Input:** `coordinates_spectra_to_impose.dat`
-* **Processing:** Shifts boundary coordinates by defined offsets (`shift_x`, `shift_y`) to ensure all nodes fall well inside the wet grid cells of the NetCDF hindcast.
+* **Processing:**
+  * Applies a user-defined coordinate offset (Δx, Δy) to all boundary points.
+  * This optional shift can be used to move the spectral extraction points slightly inside the available hindcast grid or away from coastline/grid-edge cells, ensuring that valid wave data are extracted for every boundary node.
+  * The required offset depends on the study area and the underlying wave hindcast dataset.
 * **Output:** `coordinates_spectra_to_impose_moved.dat`
 
 ### Step 3: Extract NetCDF Hindcast, Interpolate & Window Time Series
 * **Input:** `coordinates_spectra_to_impose_moved.dat` and CMEMS Wave Hindcast NetCDF (`.nc`).
 * **Processing:**
-  * Transforms NetCDF coordinates (WGS84) to UTM Zone 32N and matches nodes using k-d trees (`cKDTree`).
-  * Extracts $H_s$, $T_p$, and Mean Wave Direction ($\theta$).
-  * Interpolates temporal data (e.g., to `15min` steps) using vector-based directional interpolation to prevent $0^\circ \leftrightarrow 360^\circ$ wrap-around errors.
-  * Filters a specific storm window (`center_time ± hours`) and normalizes time into relative seconds (`time_seconds`).
-  * Handles edge NaNs physically ($H_s = 0.02\text{ m}$).
+  * Transforms the hindcast grid from WGS84 (EPSG:4326) to UTM Zone 32N (EPSG:25832).
+  * Locates the nearest hindcast grid cell for each boundary point using a cKDTree nearest-neighbour search.
+  * Extracts significant wave height (Hs), peak wave period (Tp), and mean wave direction (θ) for every boundary point and timestep.
+  * Interpolates the extracted time series to a user-defined temporal resolution (e.g. 15 min). Wave directions are interpolated using vector components to avoid 0°/360° discontinuities.
+  * Selects a user-defined simulation time window (center_time ± hours).
+  * Converts timestamps into relative simulation time (time_seconds).
+  * Fills missing values (NaN) by assigning a small minimum wave height (Hs = 0.02 m) and copying Tp and wave direction from a user-defined reference boundary point.
 * **Output:** `extracted_timeseries_points_interpolatet_window.csv`
 
 ### Step 4: Generate 2D JONSWAP Boundary Spectrum (`.spe`)
 * **Input:** Interpolated time series CSV and a dummy TOMAWAC spectrum file (`dummy.spe`).
-* **Processing:** Computes 1D JONSWAP spectra ($\gamma = 3.3$) via `mhkit`, applies a $\cos^2$ directional spreading function, formats variable naming (`F...PT2D...`), and writes the binary SELAFIN boundary file.
+* **Processing:**
+  * Reads the processed wave time series for all boundary points.
+  * Uses the dummy TOMAWAC spectrum file to obtain the required mesh and SELAFIN header information.
+  * Computes a 1D JONSWAP spectrum (γ = 3.3) for each boundary point and timestep using MHKiT.
+  * Applies a cos² directional spreading function to construct a two-dimensional directional wave spectrum.
+  * Formats the spectrum variable names according to the TOMAWAC convention (FxxxxxPT2Dxxxxxx).
+  * Writes the resulting spectra as a binary SELAFIN (.spe) file that can be used as a TOMAWAC spectral boundary condition.
 * **Output:** `boundary_jonswap.spe`
 
 ### Step 5: Convert Wind Data to SERAFIN Wind Field (`.slf`)
 * **Input:** Time series wind file (`.lqd`) and TELEMAC mesh file (`.slf`).
-* **Processing:** Converts polar wind inputs ($S, \theta$) into Cartesian components ($U, V$), maps them onto the full computational mesh, and writes a Big-Endian SERAFIN binary file.
+* **Processing:**
+  * Reads the wind time series containing wind speed and direction.
+  * Converts the polar wind data (speed, direction) into Cartesian wind components (U, V).
+  * Reads the TELEMAC mesh and its topology.
+  * Assigns the wind components uniformly to every mesh node for each timestep, creating a spatially uniform wind field.
+  * Writes the resulting wind field as a binary SERAFIN (.slf) file compatible with TELEMAC-2D and TOMAWAC.
 * **Output:** `wind_export.slf`
 
 ---
