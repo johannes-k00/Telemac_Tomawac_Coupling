@@ -32,15 +32,15 @@ The datasets are needed to *impose a wave spectrum* along the open boundary thro
 ### Step 1: Extract Open Boundary Nodes
 * **Input:** Blue Kenue Mesh file (`.ngh`) and Boundary Condition file (`.cli`).
 * **Processing:** Scans the mesh for boundary type `5444` (boundary marker = 1) and matches node IDs with coordinates $(X, Y)$.
-* **Output:** `randknoten.csv`, `merged.csv`, `coordinates_spectra.dat`
+* **Output:** `boundary_knots.csv`, `merged.csv`, `coordinates_spectra_to_impose.dat`
 
 ### Step 2: Apply Coordinate Shift
-* **Input:** `coordinates_spectra.dat`
+* **Input:** `coordinates_spectra_to_impose.dat`
 * **Processing:** Shifts boundary coordinates by defined offsets (`shift_x`, `shift_y`) to ensure all nodes fall well inside the wet grid cells of the NetCDF hindcast.
-* **Output:** `coordinates_spectra_moved.dat`
+* **Output:** `coordinates_spectra_to_impose_moved.dat`
 
 ### Step 3: Extract NetCDF Hindcast, Interpolate & Window Time Series
-* **Input:** `coordinates_spectra_moved.dat` and CMEMS Wave Hindcast NetCDF (`.nc`).
+* **Input:** `coordinates_spectra_to_impose_moved.dat` and CMEMS Wave Hindcast NetCDF (`.nc`).
 * **Processing:**
   * Transforms NetCDF coordinates (WGS84) to UTM Zone 32N and matches nodes using k-d trees (`cKDTree`).
   * Extracts $H_s$, $T_p$, and Mean Wave Direction ($\theta$).
@@ -57,7 +57,7 @@ The datasets are needed to *impose a wave spectrum* along the open boundary thro
 ### Step 5: Convert Wind Data to SERAFIN Wind Field (`.slf`)
 * **Input:** Time series wind file (`.lqd`) and TELEMAC mesh file (`.slf`).
 * **Processing:** Converts polar wind inputs ($S, \theta$) into Cartesian components ($U, V$), maps them onto the full computational mesh, and writes a Big-Endian SERAFIN binary file.
-* **Output:** `wind_sturm_final.slf`
+* **Output:** `wind_export.slf`
 
 ---
 
