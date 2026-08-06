@@ -23,7 +23,7 @@ This pipeline automates the data preparation workflow for coupled **TELEMAC-2D**
               │
               ▼
    Step 5: Convert Wind Data (.lqd) into SERAFIN Wind Field (.slf)
-
+```
 ---
 
 ## Detailed Workflow
