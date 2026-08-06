@@ -11,13 +11,13 @@ The datasets are needed to *impose a wave spectrum* along the open boundary thro
 [Mesh & Boundary Files (.ngh, .cli)]
               │
               ▼
-   Step 1: Extract Open Boundary Nodes
+   Step 1: Extract Open Boundary Coordinates
               │
               ▼
    Step 2: Apply Coordinate Shift (Shift Boundary into Hindcast Coverage)
               │
               ▼
-   Step 3: Extract NetCDF Hindcast, Interpolate & Window Time Series
+   Step 3: Extract and Process Wave Hindcast Time Series
               │
               ▼
    Step 4: Generate 2D JONSWAP Boundary Spectrum (.spe) for TOMAWAC
@@ -29,7 +29,7 @@ The datasets are needed to *impose a wave spectrum* along the open boundary thro
 
 ## Detailed Workflow
 
-### Step 1: Extract Open Boundary Nodes
+### Step 1: Extract Open Boundary Coordinates
 * **Input:** Blue Kenue Mesh file (`.ngh`) and Boundary Condition file (`.cli`).
 * **Processing:**
   * Extracts all mesh nodes marked as boundary nodes from the .ngh mesh file.
@@ -46,7 +46,7 @@ The datasets are needed to *impose a wave spectrum* along the open boundary thro
   * The required offset depends on the study area and the underlying wave hindcast dataset.
 * **Output:** `coordinates_spectra_to_impose_moved.dat`
 
-### Step 3: Extract NetCDF Hindcast, Interpolate & Window Time Series
+### Step 3: Extract and Process Wave Hindcast Time Series
 * **Input:** `coordinates_spectra_to_impose_moved.dat` and CMEMS Wave Hindcast NetCDF (`.nc`).
 * **Processing:**
   * Transforms the hindcast grid from WGS84 (EPSG:4326) to UTM Zone 32N (EPSG:25832).
@@ -59,6 +59,7 @@ The datasets are needed to *impose a wave spectrum* along the open boundary thro
 * **Output:** `extracted_timeseries_points_interpolatet_window.csv`
 
 ### Step 4: Generate 2D JONSWAP Boundary Spectrum (`.spe`)
+* **Prequisite:** A dummy TOMAWAC spectrum file (dummy.spe) must be generated beforehand. It is used as a template for the SELAFIN mesh and header information.
 * **Input:** Interpolated time series CSV and a dummy TOMAWAC spectrum file (`dummy.spe`).
 * **Processing:**
   * Reads the processed wave time series for all boundary points.
@@ -87,6 +88,15 @@ The datasets are needed to *impose a wave spectrum* along the open boundary thro
 > But somehow, through trial, error, willpower, the loss of my sanity (and a lot of magic), this pipeline actually works for me (hopefully)!
 
 ## Acknowledgements
-> **Shoutout:** Very helpful was the user "Taoan" in the openTelemac Forum that shared his coding in the forum for a similar problem
+> Special thanks to Taoan from the OpenTelemac Forum, whose shared code and explanations on spectral boundary conditions were extremely helpful during the development of this workflow.
 >
 > (https://www.opentelemac.org/index.php/assistance/forum5/19-tomawac/7657-wave-series-as-boundary-condition?start=50)
+
+## Requirements
+*  numpy
+* pandas
+* scipy
+* xarray
+* pyproj
+* mhkit
+* ppSELAFIN (pputils)
