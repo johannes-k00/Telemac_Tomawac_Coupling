@@ -82,6 +82,17 @@ The datasets are needed to *impose a wave spectrum* along the open boundary thro
 
 ---
 
+## Requirements
+*  numpy
+* pandas
+* scipy
+* xarray
+* pyproj
+* mhkit
+* ppSELAFIN (pputils)
+
+---
+
 ## Note / Disclaimer
 
 > **Full disclosure:** I'm actually a total Python noob and don't really have a clue about coding... 
@@ -92,11 +103,4 @@ The datasets are needed to *impose a wave spectrum* along the open boundary thro
 >
 > (https://www.opentelemac.org/index.php/assistance/forum5/19-tomawac/7657-wave-series-as-boundary-condition?start=50)
 
-## Requirements
-*  numpy
-* pandas
-* scipy
-* xarray
-* pyproj
-* mhkit
-* ppSELAFIN (pputils)
+
