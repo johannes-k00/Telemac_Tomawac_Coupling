@@ -4,7 +4,7 @@ This pipeline automates the data preparation workflow for coupled **TELEMAC-2D**
 
 ---
 
-## 📋 Overview of Pipeline Steps
+## Overview of Pipeline Steps
 
 ```text
 [Mesh & Boundary Files (.ngh, .cli)]
@@ -60,7 +60,7 @@ This pipeline automates the data preparation workflow for coupled **TELEMAC-2D**
 
 ---
 
-### Note / Disclaimer
+## Note / Disclaimer
 
 > **Full disclosure:** I'm actually a total Python noob and don't really have a clue about coding... 
 > But somehow, through trial, error, willpower (and a lot of magic), this pipeline actually works flawlessly for me (hopefully)! 
