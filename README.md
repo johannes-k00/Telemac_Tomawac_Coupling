@@ -3,6 +3,7 @@
 Wave Spectra & Wind Forcing Pipeline for TELEMAC-2D / TOMAWAC Coupling
 This automates the data preparation workflow for coupled TELEMAC-2D (hydrodynamics) and TOMAWAC (spectral wave model) simulations. It extracts spatial boundary nodes, queries global/regional wave hindcast datasets (NetCDF), generates 2D spectral boundary forcing files (.spe), and constructs spatially uniform binary SERAFIN wind fields (.slf).
 
+---
 
 ## Overview of Pipeline Steps
 
@@ -58,10 +59,6 @@ This automates the data preparation workflow for coupled TELEMAC-2D (hydrodynami
 * **Output:** `wind_sturm_final.slf`
 
 ---
-
-
-
-
 
 ### Note / Disclaimer
 
