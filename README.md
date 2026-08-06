@@ -1,7 +1,7 @@
 # Wave Spectra & Wind Forcing Pipeline for TELEMAC-2D / TOMAWAC Coupling
 
 This pipeline automates the data preparation workflow for coupled **TELEMAC-2D** (hydrodynamics) and **TOMAWAC** (spectral wave model) modelling. It extracts spatial boundary nodes, queries global/regional wave hindcast datasets (NetCDF), generates 2D spectral boundary forcing files (`.spe`), and constructs spatially uniform binary SERAFIN wind fields (`.slf`).
-The datasets are needed to *impose a wave spectrum* along the open boundary through **TOMAWAC**
+The datasets are needed to *impose a wave spectrum* along the open boundary through **TOMAWAC**.
 
 ---
 
@@ -64,4 +64,5 @@ The datasets are needed to *impose a wave spectrum* along the open boundary thro
 ## Note / Disclaimer
 
 > **Full disclosure:** I'm actually a total Python noob and don't really have a clue about coding... 
-> But somehow, through trial, error, willpower (and a lot of magic), this pipeline actually works flawlessly for me (hopefully)! 
+> But somehow, through trial, error, willpower, the loss of my sanity (and a lot of magic), this pipeline actually works for me (hopefully)!
+> **Shoutout:** Very helpful was user "Taoan" in the openTelemac Forum that shared his coding in the forum for a similar problem.
