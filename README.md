@@ -1,7 +1,7 @@
 # Wave Spectra & Wind Forcing Pipeline for TELEMAC-2D / TOMAWAC Coupling
 
 This pipeline automates the data preparation workflow for coupled **TELEMAC-2D** (hydrodynamics) and **TOMAWAC** (spectral wave model) modelling. It extracts spatial boundary nodes, queries global/regional wave hindcast datasets (NetCDF), generates 2D spectral boundary forcing files (`.spe`), and constructs spatially uniform binary SERAFIN wind fields (`.slf`).
-The datasets are needed to *impose a wave spectrum* along the open boundary through **TOMAWAC**.
+The generated files can be used to impose a wave spectrum on the boundary in **TOMAWAC**.
 
 ---
 
@@ -59,7 +59,7 @@ The datasets are needed to *impose a wave spectrum* along the open boundary thro
 * **Output:** `extracted_timeseries_points_interpolatet_window.csv`
 
 ### Step 4: Generate 2D JONSWAP Boundary Spectrum (`.spe`)
-* **Prequisite:** A dummy TOMAWAC spectrum file (dummy.spe) must be generated beforehand. It is used as a template for the SELAFIN mesh and header information.
+* **Prerequisite:** A dummy TOMAWAC spectrum file (dummy.spe) must be generated beforehand. It is used as a template for the SELAFIN mesh and header information.
 * **Input:** Interpolated time series CSV and a dummy TOMAWAC spectrum file (`dummy.spe`).
 * **Processing:**
   * Reads the processed wave time series for all boundary points.
@@ -83,7 +83,7 @@ The datasets are needed to *impose a wave spectrum* along the open boundary thro
 ---
 
 ## Requirements
-*  numpy
+* numpy
 * pandas
 * scipy
 * xarray
@@ -101,6 +101,6 @@ The datasets are needed to *impose a wave spectrum* along the open boundary thro
 ## Acknowledgements
 > Special thanks to Taoan from the OpenTelemac Forum, whose shared code and explanations on spectral boundary conditions were extremely helpful during the development of this workflow.
 >
-> (https://www.opentelemac.org/index.php/assistance/forum5/19-tomawac/7657-wave-series-as-boundary-condition?start=50)
+> https://www.opentelemac.org/index.php/assistance/forum5/19-tomawac/7657-wave-series-as-boundary-condition?start=50
 
 
